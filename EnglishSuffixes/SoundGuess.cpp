@@ -1,13 +1,14 @@
-#include "soundGuess.h"
-
 #include <assert.h>
+
+
+#include "SoundGuess.h"
 
 /// <summary>
 /// /i:/
 /// </summary>
 /// <param name="word"></param>
 /// <returns></returns>
-bool isLongI(std::string_view word)
+bool ens::isLongI(std::string_view word)
 {
 	assert(word.ends_with("y") == false);
 
@@ -29,7 +30,7 @@ bool isLongI(std::string_view word)
 /// </summary>
 /// <param name="word"></param>
 /// <returns></returns>
-bool isLongU(std::string_view word)
+bool ens::isLongU(std::string_view word)
 {
 	assert(word.ends_with("y") == false);
 
@@ -45,7 +46,7 @@ bool isLongU(std::string_view word)
 }
 
 
-bool isAI(std::string_view word)
+bool ens::isAI(std::string_view word)
 {
 	assert(word.ends_with("y") == false);
 
@@ -60,19 +61,20 @@ bool isAI(std::string_view word)
 	return false;
 }
 
-bool isEI(std::string_view word)
+bool ens::isEI(std::string_view word, bool isERemoved)
 {
 	assert(word.ends_with("y") == false);
 
 
 	word = word.substr(0, word.length() - 1);
 	if (word.ends_with("ai") ||
-		word.ends_with("ea"))
+		word.ends_with("ea") ||
+		(word.ends_with("a") && isERemoved))
 		return true;
 	return false;
 }
 
-bool isOI(std::string_view word)
+bool ens::isOI(std::string_view word)
 {
 	assert(word.ends_with("y") == false);
 
@@ -82,7 +84,7 @@ bool isOI(std::string_view word)
 	return false;
 }
 
-bool isAU(std::string_view word)
+bool ens::isAU(std::string_view word)
 {
 	assert(word.ends_with("y") == false);
 
@@ -96,7 +98,7 @@ bool isAU(std::string_view word)
 }
 
 
-bool isOU(std::string_view word)
+bool ens::isOU(std::string_view word)
 {
 	if (word.ends_with("ow"))
 		return true;

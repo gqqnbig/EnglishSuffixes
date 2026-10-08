@@ -2,46 +2,19 @@
 //
 
 #include <iostream>
-#include <string>
 
-#include "soundGuess.h"
+#include "EnglishSuffixes.h"
 
-bool isVowel(char c)
-{
-	static const char* vowelLetters = "aeiouy";
-
-	return strchr(vowelLetters, c) != nullptr;
-}
-
-std::string addSuffix(const std::string& word, const std::string& suffix)
-{
-	bool isERemoved = false;
-
-	char lastLetter = word[word.length() - 1];
-	if (isVowel(lastLetter) ||
-		isVowel(suffix[0]) == false)
-		return word + suffix;
-
-	// check the sound of second to last and third to last letters. We can only guess.
-
-	if (isLongI(word) || isLongU(word) ||
-		isEI(word) || isAI(word) || isAU(word) || isOI(word))
-		return  word + suffix; // long vowel. No doubling.
-
-
-
-	return word + lastLetter + suffix;
-}
+using namespace ens;
 
 int main()
 {
-	std::cout << addSuffix("close", "wise") << std::endl;
-	std::cout << addSuffix("commit", "ment") << std::endl;
-	std::cout << addSuffix("correct", "ness") << std::endl;
-	std::cout << addSuffix("delight", "ful") << std::endl;
-	std::cout << addSuffix("direct", "ly") << std::endl;
-	std::cout << addSuffix("down", "ward") << std::endl;
-	std::cout << addSuffix("regard", "less") << std::endl;
+	std::cout << addSuffix("shade", "y") << std::endl;
+	std::cout << addSuffix("note", "able") << std::endl;
+	std::cout << addSuffix("make", "ing") << std::endl;
+	std::cout << addSuffix("fame", "ous") << std::endl;
+	std::cout << addSuffix("hope", "ing") << std::endl;
+
 
 	std::cout << addSuffix("stoop", "ed") << std::endl;
 	std::cout << addSuffix("rain", "ing") << std::endl;

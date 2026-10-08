@@ -2,6 +2,10 @@
 
 #include <string_view>
 
+
+namespace ens
+{
+
 #pragma region Diphthongs in many dialects. Conceptual diphthongs
 
 /// <summary>
@@ -23,7 +27,7 @@ bool isLongI(std::string_view word);
 /// </summary>
 /// <param name="word"></param>
 /// <returns></returns>
-bool isEI(std::string_view word);
+bool isEI(std::string_view word, bool isERemoved);
 
 /// <summary>
 /// /oʊ/ as in goat, home
@@ -54,3 +58,5 @@ bool isOI(std::string_view word);
 bool isAU(std::string_view word);
 
 #pragma endregion
+
+}
