@@ -22,12 +22,18 @@ std::string BuildTestName(const testing::TestParamInfo<std::pair<const char*, co
 	std::string suffix{ info.param.second };
 	// Comment out in gtest-param-util.h
 	// GTEST_CHECK_(IsValidParamName(param_name))
+#ifdef _DEBUG
+	// Visual Studio Test Runner can't properly debug an instance of a parameterized test
+	// if the instance name has a dash.
+	return word + std::to_string(info.index) + suffix;
+#else
 	return word + "-" + suffix;
+#endif
+
 }
 
 class SimpleConnect : public testing::TestWithParam<std::pair<const char*, const char*>>
 {
-
 };
 
 TEST_P(SimpleConnect, run) {
@@ -54,7 +60,6 @@ INSTANTIATE_TEST_SUITE_P(OurLanguageCanada, SimpleConnect,
 
 class RemoveE : public testing::TestWithParam<std::pair<const char*, const char*>>
 {
-
 };
 
 TEST_P(RemoveE, run) {
@@ -66,13 +71,16 @@ TEST_P(RemoveE, run) {
 }
 
 
+
 INSTANTIATE_TEST_SUITE_P(PracticalEnglishUsage346, RemoveE,
 	testing::Values(
 		std::pair("shade", "y"),
 		std::pair("note", "able"),
 		std::pair("make", "ing"),
 		std::pair("fame", "ous"),
-		std::pair("hope", "ing")
+		std::pair("hope", "ing"),
+		// subsection 2
+		std::pair("true", "ly")
 	), BuildTestName);
 
 INSTANTIATE_TEST_SUITE_P(PracticalEnglishUsage346, SimpleConnect,
@@ -82,15 +90,78 @@ INSTANTIATE_TEST_SUITE_P(PracticalEnglishUsage346, SimpleConnect,
 		std::pair("agree", "able"),
 		std::pair("dye", "ing"),
 		std::pair("replace", "able"),
-		std::pair("courage", "ous")
+		std::pair("courage", "ous"),
+		// subsection 2
+		std::pair("excite", "ment"),
+		std::pair("complete", "ness"),
+		std::pair("definite", "ly")
 	), BuildTestName);
 
-//INSTANTIATE_TEST_SUITE_P(PracticalEnglishUsage346, SimpleConnect,
-//	testing::Values(
-//		std::pair("excite", "ment")
-//		//std::pair("note", "able"),
-//		//std::pair("make", "ing"),
-//		//std::pair("fame", "ous"),
-//		//std::pair("hope", "ing")
-//	), BuildTestName);
 
+class CKRule : public testing::TestWithParam<std::pair<const char*, const char*>>
+{
+};
+
+TEST_P(CKRule, run) {
+	std::pair<const char*, const char*> p = GetParam();
+	std::string word{ p.first };
+	std::string suffix{ p.second };
+
+	EXPECT_EQ(addSuffix(word, suffix), word + "k" + suffix);
+}
+
+INSTANTIATE_TEST_SUITE_P(PracticalEnglishUsage347, CKRule,
+	testing::Values(
+		std::pair("picnic", "er"),
+		std::pair("panic", "ing"),
+		std::pair("minic", "ed")
+	), BuildTestName);
+
+
+class Y2IRule : public testing::TestWithParam<std::pair<const char*, const char*>>
+{
+};
+
+TEST_P(Y2IRule, run) {
+	std::pair<const char*, const char*> p = GetParam();
+	std::string word{ p.first };
+	std::string suffix{ p.second };
+
+	EXPECT_EQ(addSuffix(word, suffix), word.substr(0, word.length() - 1) + "i" + suffix);
+}
+
+INSTANTIATE_TEST_SUITE_P(PracticalEnglishUsage348, Y2IRule,
+	testing::Values(
+		std::pair("hurry", "ed"),
+		std::pair("marry", "age"),
+		std::pair("happy", "ly")
+	), BuildTestName);
+
+INSTANTIATE_TEST_SUITE_P(PracticalEnglishUsage348, SimpleConnect,
+	testing::Values(
+		std::pair("try", "ing"),
+		std::pair("baby", "ish"),
+		std::pair("tory", "ism"),
+		// subsection 4: no change after a vowel
+		std::pair("buy", "ing"),
+		std::pair("play", "ed")
+	), BuildTestName);
+
+
+class IE2YRule : public testing::TestWithParam<std::pair<const char*, const char*>>
+{
+};
+
+TEST_P(IE2YRule, run) {
+	std::pair<const char*, const char*> p = GetParam();
+	std::string word{ p.first };
+	std::string suffix{ p.second };
+
+	EXPECT_EQ(addSuffix(word, suffix), word.substr(0, word.length() - 2) + "y" + suffix);
+}
+
+INSTANTIATE_TEST_SUITE_P(PracticalEnglishUsage348, IE2YRule,
+	testing::Values(
+		std::pair("die", "ing"),
+		std::pair("lie", "ing")
+	), BuildTestName);

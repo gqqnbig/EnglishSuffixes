@@ -13,8 +13,15 @@ bool isVowel(char c)
 
 bool dropFinalE(std::string_view& word, const std::string& suffix)
 {
+	// https://our-languages.canada.ca/en/writing-tips-plus/spelling-words-ending-in-a-silent-e
 	if (word.length() <= 1 || suffix.length() == 0)
 		return false;
+
+	if (word.ends_with("ue"))
+	{
+		word = word.substr(0, word.length() - 1);
+		return true;
+	}
 
 	if (word[word.length() - 1] != 'e' || isVowel(suffix[0]) == false)
 		return false;
@@ -38,10 +45,28 @@ bool dropFinalE(std::string_view& word, const std::string& suffix)
 	return true;
 }
 
+
 std::string ens::addSuffix(std::string_view word, const std::string& suffix)
 {
 	if (word.length() == 0)
 		return suffix;
+
+	// picnic -> picnicker
+	// minic -> minicked
+	if (word.ends_with("c") && isVowel(suffix[0]))
+		return std::string(word) + "k" + suffix;
+
+	// Change y to i if the suffix doesn't start with i.
+	if (word.ends_with("y")
+		&& isVowel(word[word.length() - 2]) == false
+		&& suffix[0] != 'i')
+		return std::string(word.substr(0, word.length() - 1)) + "i" + suffix;
+
+	// Without this rule, the final e will be removed.
+	// If the penultimate letter is i and the suffix starts with i,
+	// we will get "ii".
+	if (word.ends_with("ie") && suffix[0] == 'i')
+		return std::string(word.substr(0, word.length() - 2)) + "y" + suffix;
 
 	bool isERemoved = dropFinalE(word, suffix);
 
