@@ -45,7 +45,7 @@ bool isOU(std::string_view word);
 /// </summary>
 /// <param name="word"></param>
 /// <returns></returns>
-bool isAI(std::string_view word);
+bool isAI(std::string_view word, bool isERemoved);
 
 
 bool isOI(std::string_view word);

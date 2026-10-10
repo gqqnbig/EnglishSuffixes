@@ -46,7 +46,7 @@ bool ens::isLongU(std::string_view word)
 }
 
 
-bool ens::isAI(std::string_view word)
+bool ens::isAI(std::string_view word, bool isERemoved)
 {
 	assert(word.ends_with("y") == false);
 
@@ -54,9 +54,8 @@ bool ens::isAI(std::string_view word)
 		return true;
 
 	word = word.substr(0, word.length() - 1);
-	if (word.ends_with("ie")
-		//word.ends_with("i") //too many false positive
-		)
+	if (word.ends_with("ie") ||
+		(word.ends_with("i") && isERemoved))
 		return true;
 	return false;
 }

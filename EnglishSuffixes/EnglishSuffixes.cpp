@@ -79,7 +79,7 @@ std::string ens::addSuffix(std::string_view word, const std::string& suffix)
 	// check the sound of second to last and third to last letters. We can only guess.
 
 	if (isLongI(word) || isLongU(word) ||
-		isEI(word, isERemoved) || isAI(word) || isAU(word) || isOI(word) || isOU(word))
+		isEI(word, isERemoved) || isAI(word, isERemoved) || isAU(word) || isOI(word) || isOU(word))
 		return  std::string(word) + suffix; // long vowel. No doubling.
 
 

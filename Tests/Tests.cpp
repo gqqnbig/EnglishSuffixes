@@ -9,10 +9,10 @@ using namespace ens;
 
 
 
-TEST(Suffixes, addSuffix)
-{
-	EXPECT_EQ(addSuffix("clock", "wise"), "clockwise");
 
+TEST(Suffixes, test)
+{
+	EXPECT_EQ(addSuffix("wipe", "ing"), "wiping");
 }
 
 
