@@ -50,6 +50,8 @@ std::string ens::addSuffix(std::string_view word, const std::string& suffix)
 {
 	if (word.length() == 0)
 		return suffix;
+	if (suffix.length() == 0)
+		return std::string(word);
 
 	// picnic -> picnicker
 	// minic -> minicked

@@ -9,6 +9,13 @@ using namespace ens;
 
 
 
+TEST(Suffixes, lengths)
+{
+	EXPECT_EQ(addSuffix("", ""), "");
+	EXPECT_EQ(addSuffix("x", ""), "x");
+	EXPECT_EQ(addSuffix("", "y"), "y");
+	EXPECT_EQ(addSuffix("x", "y"), "xy");
+}
 
 TEST(Suffixes, test)
 {
