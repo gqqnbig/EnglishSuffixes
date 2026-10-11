@@ -12,4 +12,10 @@ namespace ens
 
 std::string addSuffix(std::string_view word, const std::string& suffix);
 
+
+inline std::string simpleConnect(std::string_view word, const std::string& suffix)
+{
+	return std::string(word) + suffix;
+}
+
 }

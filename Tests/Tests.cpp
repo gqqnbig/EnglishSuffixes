@@ -17,9 +17,16 @@ TEST(Suffixes, lengths)
 	EXPECT_EQ(addSuffix("x", "y"), "xy");
 }
 
-TEST(Suffixes, test)
+TEST(Suffixes, oneSyllable)
 {
 	EXPECT_EQ(addSuffix("wipe", "ing"), "wiping");
+	EXPECT_EQ(addSuffix("axe", "ing"), "axing");
+	EXPECT_EQ(addSuffix("jaw", "ing"), "jawing");
+}
+
+TEST(Suffixes, twoSyllables)
+{
+	EXPECT_EQ(addSuffix("vomit", "ing"), "vomiting");
 }
 
 
@@ -48,7 +55,7 @@ TEST_P(SimpleConnect, run) {
 	std::string word{ p.first };
 	std::string suffix{ p.second };
 
-	EXPECT_EQ(addSuffix(word, suffix), word + suffix);
+	EXPECT_EQ(addSuffix(word, suffix), simpleConnect(word, suffix));
 }
 
 
@@ -62,6 +69,11 @@ INSTANTIATE_TEST_SUITE_P(OurLanguageCanada, SimpleConnect,
 		std::pair("direct", "ly"),
 		std::pair("down", "ward"),
 		std::pair("regard", "less")
+	), BuildTestName);
+
+INSTANTIATE_TEST_SUITE_P(PracticalEnglishUsage347, SimpleConnect,
+	testing::Values(
+		std::pair("show", "ing")
 	), BuildTestName);
 
 

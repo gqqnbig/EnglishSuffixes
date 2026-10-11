@@ -72,17 +72,22 @@ std::string ens::addSuffix(std::string_view word, const std::string& suffix)
 
 	bool isERemoved = dropFinalE(word, suffix);
 
-
 	char lastLetter = word[word.length() - 1];
-	if (isVowel(lastLetter) ||
-		isVowel(suffix[0]) == false)
-		return std::string(word) + suffix;
+	if (lastLetter == 'c') // c doesn't double.
+		return simpleConnect(word, suffix);
+	if (lastLetter == 'w' || isVowel(lastLetter)) // Ending w is part of a vowel sound.
+		return simpleConnect(word, suffix);
+	if (lastLetter == 'x' || (word.length() >= 2 && isVowel(word[word.length() - 2]) == false)) // x is pronounced as /ks/, so there are two consonant sounds.
+		return simpleConnect(word, suffix);
+
+	if (isVowel(suffix[0]) == false)
+		return simpleConnect(word, suffix);
 
 	// check the sound of second to last and third to last letters. We can only guess.
 
 	if (isLongI(word) || isLongU(word) ||
 		isEI(word, isERemoved) || isAI(word, isERemoved) || isAU(word) || isOI(word) || isOU(word))
-		return  std::string(word) + suffix; // long vowel. No doubling.
+		return simpleConnect(word, suffix); // long vowel. No doubling.
 
 
 
