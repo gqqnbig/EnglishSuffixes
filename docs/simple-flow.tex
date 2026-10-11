@@ -1,0 +1,112 @@
+\documentclass[svgnames, tikz]{standalone}
+\usetikzlibrary{positioning}
+\usetikzlibrary[shapes.geometric]
+\usetikzlibrary {shapes.misc}
+\usetikzlibrary {decorations.text}
+
+\usetikzlibrary{calc}
+
+
+\usepackage{fontspec}
+\newfontfamily\Chinese{msyh.ttc}
+
+\begin{document}
+
+\tikzset{Arrow/.style={->, >=stealth, draw}}
+
+\tikzset{Terminal/.style={draw=Green, line width=1pt, shape=rounded rectangle, inner sep=0.8em}}
+\tikzset{Decision/.style={draw, shape=diamond, aspect=1.3, inner sep=0pt, minimum size=3em}}
+
+\begin{tikzpicture}
+
+
+\node[Decision] (ck)  at (0,0) {-c + V-};
+
+\node[right=of ck, Terminal] (ck-end) { -ckV- };
+
+\path[Arrow, postaction={decorate, decoration={raise=2pt, text align=center, text along path, text={Yes}}}] (ck) -- (ck-end);
+
+\node[left=of ck,  Decision] (yi) {-Vy + ? } ;
+\node[left=of yi, Terminal, align=center] (yi-end) { -V\textcolor{red}{i}? \\ \Chinese 注意拼写规则 };
+\path[Arrow, postaction={decorate, decoration={raise=2pt, reverse path, text align=center, text along path, text={Yes}}}] (yi) -- (yi-end);
+
+\coordinate (p1)  at ([yshift=1cm]$(ck)!0.5!(yi)$);
+\node[above=of p1, Terminal] (start) {};
+\draw (start) -- (p1);
+\draw[Arrow] (p1) -| (ck);
+\draw[Arrow] (p1) -| (yi);
+
+\coordinate (p2)  at ([yshift=-1cm]$(ck)!0.5!(yi)$);
+
+\node[below=of p2, Decision, align=center] (consecutive3) {-XX + X- \\ \Chinese 连续三个字母相同};
+\node[right=of consecutive3, Decision, align=center] (consecutive3-1) {\Chinese 后缀只有一个字母};
+\node[right=of consecutive3-1, Terminal, align=center] (consecutive3-1-end) {-XXeX \\ \Chinese 中间补e};
+\path[Arrow, postaction={decorate, decoration={raise=2pt, text align=center, text along path, text={Yes}}}] (consecutive3) -- (consecutive3-1);
+\path[Arrow, postaction={decorate, decoration={raise=2pt, text align=center, text along path, text={Yes}}}] (consecutive3-1) -- (consecutive3-1-end);
+
+\node[below=of consecutive3-1, Terminal, align=center] (consecutive3-more) {-XX- \\ \Chinese 删除一个相同字母};
+\path[Arrow, postaction={decorate, decoration={raise=2pt, text align=center, text along path, text={No}}}] (consecutive3-1) -- (consecutive3-more);
+
+\draw (yi) |- (p2);
+\draw (ck) |- (p2);
+\node[anchor=south, yshift=2pt] at (p2) {No};
+\draw[Arrow] (p2) -- (consecutive3);
+
+\node[below=of consecutive3, draw, inner sep=0.8em, align=center] (drop-e) {Drop E rule 
+\\ \Chinese 记住原词和变形后的词
+%\\\Chinese 记住e是否被删去
+};
+\draw[Arrow, postaction={decorate, decoration={raise=2pt, text align=center, text along path, text={No}}}] (consecutive3) -- (drop-e);
+
+\node[below=of drop-e, Decision, align=center] (ending-sound-v) {\Chinese 原词\\
+\Chinese 结尾发音是元音};
+
+
+\node[below=of ending-sound-v, Decision, align=center] (ending-sound-cc) {\Chinese 原词结尾发音\\\Chinese 是连续辅音};
+
+\node[below=of ending-sound-cc, Decision, align=center] (ending-letter-v) {\Chinese 变形后\\
+\Chinese 结尾字母是元音字母
+\\(or w)};
+
+
+\node[below=of ending-letter-v, Decision, align=center] (ending-letters) {
+\Chinese 变形后\\
+\Chinese 结尾字母是\\ h,k,q,v,w,x,y,z\\ or c};
+
+
+\node[below=of ending-letters, anchor=east, align=center] (hint) {\Chinese 至此，原词结尾发音一定是辅音，
+\\\Chinese 结尾辅音前一个音一定是元音
+\\\Chinese 变形后的结尾字母一定是可双写字母};
+
+\draw[Arrow] (drop-e) -- (ending-sound-v);
+\draw[Arrow, postaction={decorate, decoration={raise=2pt, text align=center, text along path, text={No}}}] (ending-sound-v) -- (ending-sound-cc);
+\draw[Arrow, postaction={decorate, decoration={raise=2pt, text align=center, text along path, text={No}}}] (ending-sound-cc) -- (ending-letter-v);
+\draw[Arrow, postaction={decorate, decoration={raise=2pt, text align=center, text along path, text={No}}}] (ending-letter-v) -- (ending-letters);
+%\draw[Arrow, postaction={decorate, decoration={raise=2pt, text align=center, text along path, text={No}}}] (ending-letters) -- (hint);
+
+\coordinate (p3) at ([xshift=1cm]ending-letter-v.east);
+\node[right=of p3, Terminal] (simple-connect) {Simple connect};
+
+\draw[postaction={decorate, decoration={raise=2pt, text along path, text={Yes}}}] (ending-sound-v) -| (p3);
+\draw[postaction={decorate, decoration={raise=2pt, text along path, text={Yes}}}] (ending-sound-cc) -| (p3);
+\draw[postaction={decorate, decoration={raise=2pt, text along path, text={Yes}}}] (ending-letter-v) -| (p3);
+\draw[postaction={decorate, decoration={raise=2pt, text along path, text={Yes}}}] (ending-letters) -| (p3);
+\draw[Arrow] (p3) -- (simple-connect);
+
+\node[below=2cm of ending-letters, Decision, align=center] (long-vowel) {\Chinese 原词结尾辅音\\
+\Chinese 前一个音是长元音 };
+
+\node[below=of long-vowel, Decision, align=center] (more-syllables) {\Chinese 原词音节多于一个};
+
+\draw[Arrow, postaction={decorate, decoration={raise=2pt, text align=center, text along path, text={No}}}] (ending-letters) -- (long-vowel);
+\draw[Arrow, postaction={decorate, decoration={raise=2pt, text align=center, text along path, text={No}}}] (long-vowel) -- (more-syllables);
+\draw[postaction={decorate, decoration={raise=2pt, text along path, text={Yes}}}] (long-vowel) -| (p3);
+\draw[postaction={decorate, decoration={raise=2pt, text along path, text={Yes}}}] (more-syllables) -| (p3);
+
+\node[below=of more-syllables, Terminal] (doubling) {\Chinese 双写变形后的结尾字母};
+\draw[Arrow, postaction={decorate, decoration={raise=2pt, text align=center, text along path, text={No}}}] (more-syllables) -- (doubling);
+
+\end{tikzpicture}
+
+
+\end{document}
