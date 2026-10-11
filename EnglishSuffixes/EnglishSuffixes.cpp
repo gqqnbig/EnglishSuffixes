@@ -45,6 +45,24 @@ bool dropFinalE(std::string_view& word, const std::string& suffix)
 	return true;
 }
 
+size_t GetSyllables(std::string_view word, bool isERemoved)
+{
+	bool previousIsVowel = isERemoved;
+	size_t syllables = isERemoved ? 1 : 0;
+	for (int i = static_cast<int>(word.length()) - 1; i >= 0; i--)
+	{
+		if (isVowel(word[i]))
+		{
+			if (previousIsVowel == false)
+				syllables++;
+			previousIsVowel = true;
+		}
+		else
+			previousIsVowel = false;
+	}
+	return syllables;
+}
+
 
 std::string ens::addSuffix(std::string_view word, const std::string& suffix)
 {
@@ -82,6 +100,10 @@ std::string ens::addSuffix(std::string_view word, const std::string& suffix)
 
 	if (isVowel(suffix[0]) == false)
 		return simpleConnect(word, suffix);
+
+	if (GetSyllables(word, isERemoved) > 1)
+		return simpleConnect(word, suffix);
+
 
 	// check the sound of second to last and third to last letters. We can only guess.
 
